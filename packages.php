@@ -1,29 +1,16 @@
 <?php
-// This file automatically generates packages.json
+$keys = isset($_GET['key']) ? array_map('trim', explode(',', strtolower($_GET['key']))) : array();
+$packages = array();
 
-$files = glob("*.json");
+if (count(array_intersect(array('ijb2x8hd6q57bm65ynvvkq'), $keys)) > 0)
+$packages[] = array(
+    'name' => 'Vanilla',
+    'title' => 'Vanilla',
+    'version' => '2022-11-07-13-05-38',
+    'priority' => 0,
+    'location' => 'vanilla.json',
+);
 
-if ($files === false) {
-    $files = [];
-}
-
-$document = [
-    'minimumVersion' => 1,
-    'packages' => [],
-];
-
-foreach ($files as $file) {
-    $data = json_decode(file_get_contents($file));
-    if (isset($data->name) && isset($data->version)) {
-        $document['packages'][] = [
-            'name' => $data->name,
-            'title' => isset($data->title) ? $data->title : $data->name,
-            'version' => $data->version,
-            'location' => basename($file),
-            'priority' => 1,
-        ];
-    }
-}
-
-header("Content-Type: text/plain");
-echo json_encode($document, JSON_PRETTY_PRINT);
+$out = array('minimumVersion' => 1, 'packages' => $packages);
+header('Content-Type: text/plain; charset=utf-8');
+echo json_encode($out);
