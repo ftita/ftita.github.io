@@ -2,10 +2,10 @@
   "minimumVersion" : 1,
   "packages" : [
     {
-      "title" : "Vanilla",
-      "name" : "Vanilla",
-      "version" : "2022-11-07-12-26-08",
-      "location" : "vanilla.json",
+      "title" : "Burla",
+      "name" : "Kaiser",
+      "version" : "2022-11-07-14-23-17",
+      "location" : "kaiser.json",
       "priority" : 0
     }
   ]
