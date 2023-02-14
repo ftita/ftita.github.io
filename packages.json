@@ -1,0 +1,12 @@
+{
+  "minimumVersion" : 1,
+  "packages" : [
+    {
+      "title" : "Vanilla",
+      "name" : "Vanilla",
+      "version" : "2023-02-14-21-35-20",
+      "location" : "vanilla.json",
+      "priority" : 0
+    }
+  ]
+}
