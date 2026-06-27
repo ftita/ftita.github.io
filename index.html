@@ -1,360 +1,357 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Francesco — Portfolio creativo. Design, sviluppo web e brand experience." />
-  <title>Francesco. Just Build It.</title>
-  <link rel="stylesheet" href="css/styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STUDIO® — Creative Direction</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        /* RESET & BASE */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg-color: #0A0A0A;
+            --text-color: #EFEFEF;
+            --accent-color: #FF4500;
+            --font-head: 'Syne', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            cursor: none;
+        }
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+
+        /* GRAIN OVERLAY */
+        .grain {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 9998; opacity: 0.05;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* CUSTOM CURSOR */
+        .cursor-dot, .cursor-outline {
+            position: fixed; top: 0; left: 0; pointer-events: none;
+            border-radius: 50%; z-index: 9999; transform: translate(-50%, -50%);
+            transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease;
+        }
+        .cursor-dot { width: 6px; height: 6px; background-color: var(--text-color); }
+        .cursor-outline {
+            width: 40px; height: 40px; border: 1px solid rgba(239, 239, 239, 0.5);
+            transition: transform 0.15s ease-out, width 0.3s, height 0.3s, border-color 0.3s;
+        }
+        .cursor-outline.hover {
+            width: 80px; height: 80px; background-color: rgba(255, 69, 0, 0.1);
+            border-color: var(--accent-color); mix-blend-mode: difference;
+        }
+
+        /* HEADER */
+        header {
+            position: fixed; top: 0; left: 0; right: 0; padding: 30px 40px;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 100; mix-blend-mode: difference;
+        }
+        .logo { font-family: var(--font-head); font-weight: 700; font-size: 1.2rem; letter-spacing: -0.02em; cursor: pointer; }
+        nav ul { display: flex; gap: 30px; }
+        nav a { font-size: 0.85rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; position: relative; opacity: 0.6; transition: opacity 0.3s; cursor: pointer; }
+        nav a.active, nav a:hover { opacity: 1; }
+        nav a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px; background: #fff; transition: width 0.4s ease; }
+        nav a:hover::after, nav a.active::after { width: 100%; }
+
+        /* PAGINE E TRANSIZIONI */
+        main { padding-top: 80px; min-height: 100vh; }
+        .page { display: none; }
+        .page.active { display: block; animation: pageEnter 0.8s cubic-bezier(0.76, 0, 0.24, 1) forwards; }
+        @keyframes pageEnter {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* HERO */
+        .hero { min-height: calc(100vh - 80px); display: flex; flex-direction: column; justify-content: flex-end; padding: 0 40px 60px; position: relative; }
+        .hero-meta { display: flex; justify-content: space-between; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.6; margin-bottom: 30px; }
+        .hero h1 { font-family: var(--font-head); font-size: clamp(3rem, 12vw, 15rem); line-height: 0.85; letter-spacing: -0.04em; font-weight: 700; text-transform: uppercase; }
+        .mask-wrap { overflow: hidden; display: block; }
+        .mask-wrap span { display: inline-block; transform: translateY(110%); animation: revealText 1s cubic-bezier(0.76, 0, 0.24, 1) forwards; }
+        @keyframes revealText { to { transform: translateY(0); } }
+
+        /* MARQUEE */
+        .marquee { padding: 40px 0; border-top: 1px solid rgba(255,255,255,0.1); border-bottom: 1px solid rgba(255,255,255,0.1); overflow: hidden; white-space: nowrap; }
+        .marquee-track { display: inline-block; animation: marquee 25s linear infinite; }
+        .marquee-track span { font-family: var(--font-head); font-size: 4rem; font-weight: 600; margin: 0 30px; color: transparent; -webkit-text-stroke: 1px var(--text-color); }
+        .marquee-track span.filled { color: var(--text-color); -webkit-text-stroke: 0; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* WORKS LIST */
+        .works { padding: 100px 40px; }
+        .works-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 60px; }
+        .works-header h2 { font-family: var(--font-head); font-size: 1.5rem; font-weight: 500; }
+        .project-list { border-top: 1px solid rgba(255,255,255,0.2); }
+        .project-item { border-bottom: 1px solid rgba(255,255,255,0.2); padding: 30px 0; display: grid; grid-template-columns: 50px 1fr auto auto; align-items: baseline; gap: 20px; transition: padding 0.4s ease; cursor: pointer; }
+        .project-item:hover { padding-left: 30px; }
+        .project-num { font-size: 0.8rem; opacity: 0.5; }
+        .project-name { font-family: var(--font-head); font-size: clamp(2rem, 6vw, 5rem); font-weight: 600; letter-spacing: -0.02em; transition: color 0.3s ease; }
+        .project-item:hover .project-name { color: var(--accent-color); }
+        .project-tag, .project-year { font-size: 0.9rem; opacity: 0.7; text-transform: uppercase; }
+        .project-preview { position: fixed; top: 0; left: 0; width: 350px; height: 450px; z-index: 50; pointer-events: none; opacity: 0; transform: translate(-50%, -50%) scale(0.8); transition: opacity 0.4s ease, transform 0.4s ease; object-fit: cover; border-radius: 4px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .project-preview.active { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
+        /* PAGINA STUDIO */
+        .studio-content { padding: 100px 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
+        .studio-text h2 { font-family: var(--font-head); font-size: clamp(2rem, 4vw, 4rem); line-height: 1.1; margin-bottom: 40px; }
+        .studio-text p { font-size: 1.1rem; line-height: 1.6; opacity: 0.8; margin-bottom: 20px; }
+        .studio-info h3 { font-family: var(--font-head); text-transform: uppercase; margin-bottom: 20px; opacity: 0.5; font-size: 0.9rem; }
+        .studio-info ul { margin-bottom: 40px; }
+        .studio-info li { font-size: 1.5rem; font-family: var(--font-head); border-bottom: 1px solid rgba(255,255,255,0.1); padding: 15px 0; display: flex; justify-content: space-between; }
+
+        /* PAGINA CONTATTI */
+        .contact-content { padding: 100px 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; min-height: calc(100vh - 80px); }
+        .contact-box { display: flex; flex-direction: column; justify-content: flex-end; }
+        .contact-label { font-size: 0.8rem; text-transform: uppercase; opacity: 0.5; margin-bottom: 20px; }
+        .contact-email { font-family: var(--font-head); font-size: clamp(1.5rem, 3vw, 2.5rem); border-bottom: 2px solid var(--accent-color); display: inline-block; padding-bottom: 5px; margin-bottom: 60px; cursor: pointer; }
+        .socials { font-family: var(--font-head); font-size: 1.5rem; display: flex; gap: 20px; }
+        .socials a { border-bottom: 1px solid transparent; transition: border 0.3s; }
+        .socials a:hover { border-bottom: 1px solid var(--text-color); }
+
+        /* FOOTER */
+        footer { padding: 30px 40px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; font-size: 0.8rem; opacity: 0.5; text-transform: uppercase; }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            body { cursor: auto; }
+            .cursor-dot, .cursor-outline { display: none; }
+            header { padding: 20px; }
+            .hero { padding: 80px 20px 40px; }
+            .works, .studio-content, .contact-content { padding: 60px 20px; grid-template-columns: 1fr; gap: 40px; }
+            .project-item { grid-template-columns: 30px 1fr; gap: 10px; }
+            .project-tag, .project-year { display: none; }
+            .project-preview { display: none; }
+            footer { flex-direction: column; gap: 10px; text-align: center; }
+        }
+    </style>
 </head>
 <body>
-  <a href="#main" class="skip-link">Vai al contenuto principale</a>
 
-  <!-- Top bar -->
-  <header class="site-header" id="header">
-    <nav class="nav-top" aria-label="Utilità">
-      <ul class="nav-utility">
-        <li><a href="#contatti">Contatti</a></li>
-        <li><a href="#progetti">Progetti</a></li>
-        <li><a href="mailto:hello@francesco.dev">Scrivimi</a></li>
-      </ul>
-      <ul class="nav-utility nav-utility--right">
-        <li><a href="#about">Chi sono</a></li>
-        <li><a href="#" class="nav-cta">CV PDF</a></li>
-      </ul>
-    </nav>
+    <!-- Effetti Visivi Globali -->
+    <div class="grain"></div>
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+    <img src="https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=600&auto=format&fit=crop" class="project-preview" id="projectPreview" alt="Preview">
 
-    <div class="nav-main">
-      <a href="/" class="logo" aria-label="Francesco — Home">
-        <svg viewBox="0 0 60 22" width="60" height="22" aria-hidden="true">
-          <text x="0" y="18" font-family="Helvetica Neue, Arial, sans-serif" font-size="18" font-weight="700" fill="currentColor">FR</text>
-        </svg>
-      </a>
+    <!-- Header -->
+    <header>
+        <div class="logo" data-page="home">STUDIO®</div>
+        <nav>
+            <ul>
+                <li><a data-page="home" class="active">Lavori</a></li>
+                <li><a data-page="studio">Studio</a></li>
+                <li><a data-page="contatti">Contatti</a></li>
+            </ul>
+        </nav>
+    </header>
 
-      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu">
-        <span class="nav-toggle__bar"></span>
-        <span class="nav-toggle__bar"></span>
-        <span class="sr-only">Menu</span>
-      </button>
+    <!-- Contenitore Principale delle Pagine -->
+    <main>
+        
+        <!-- PAGINA HOME -->
+        <section id="home" class="page active">
+            <div class="hero">
+                <div class="hero-meta">
+                    <span>(Portfolio 2024)</span>
+                    <span>Design & Direzione Creativa</span>
+                    <span>Basato a Milano</span>
+                </div>
+                <h1>
+                    <div class="mask-wrap"><span>Design</span></div>
+                    <div class="mask-wrap"><span>Visivo</span></div>
+                    <div class="mask-wrap"><span>Creativo</span></div>
+                </h1>
+            </div>
 
-      <div class="nav-menu" id="navMenu">
-        <ul class="nav-links">
-          <li><a href="#progetti">Progetti</a></li>
-          <li><a href="#skills">Skills</a></li>
-          <li><a href="#esperienza">Esperienza</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#contatti">Contatti</a></li>
-        </ul>
-        <div class="nav-search">
-          <label for="search" class="sr-only">Cerca progetti</label>
-          <input type="search" id="search" placeholder="Cerca progetti..." autocomplete="off" />
-        </div>
-      </div>
+            <div class="marquee">
+                <div class="marquee-track">
+                    <span>Branding</span><span class="filled">—</span><span class="filled">Web Design</span><span>—</span><span>Art Direction</span><span class="filled">—</span><span class="filled">Packaging</span><span>—</span>
+                    <span>Branding</span><span class="filled">—</span><span class="filled">Web Design</span><span>—</span><span>Art Direction</span><span class="filled">—</span><span class="filled">Packaging</span><span>—</span>
+                </div>
+            </div>
 
-      <div class="nav-actions">
-        <button class="icon-btn" aria-label="Cerca" id="searchBtn">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
-        </button>
-        <a href="#contatti" class="nav-signin">Collabora</a>
-      </div>
-    </div>
-  </header>
+            <div class="works">
+                <div class="works-header">
+                    <h2>Lavori Scelti (04)</h2>
+                    <span>(2023 — 2024)</span>
+                </div>
+                <div class="project-list">
+                    <a class="project-item" data-img="https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=600&auto=format&fit=crop">
+                        <div class="project-num">(01)</div><div class="project-name">Aurora Studio</div><div class="project-tag">Branding / Web</div><div class="project-year">2024</div>
+                    </a>
+                    <a class="project-item" data-img="https://images.unsplash.com/photo-1558655146-9f40138edfeb?q=80&w=600&auto=format&fit=crop">
+                        <div class="project-num">(02)</div><div class="project-name">Onde Digitali</div><div class="project-tag">Art Direction</div><div class="project-year">2024</div>
+                    </a>
+                    <a class="project-item" data-img="https://images.unsplash.com/photo-1572044162444-ad60f128bdea?q=80&w=600&auto=format&fit=crop">
+                        <div class="project-num">(03)</div><div class="project-name">Essenza Bio</div><div class="project-tag">Packaging</div><div class="project-year">2023</div>
+                    </a>
+                    <a class="project-item" data-img="https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?q=80&w=600&auto=format&fit=crop">
+                        <div class="project-num">(04)</div><div class="project-name">Metropolis Mag</div><div class="project-tag">Editoriale / Print</div><div class="project-year">2023</div>
+                    </a>
+                </div>
+            </div>
+        </section>
 
-  <main id="main">
-    <!-- Hero -->
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="hero__media">
-        <img
-          src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1920&q=80"
-          alt="Workspace con laptop e codice"
-          width="1920"
-          height="1080"
-          fetchpriority="high"
-        />
-      </div>
-      <div class="hero__content">
-        <p class="hero__eyebrow">Portfolio 2026</p>
-        <h1 id="hero-title" class="hero__title">COSTRUISCI<br />QUALCOSA DI GRANDE</h1>
-        <p class="hero__subtitle">
-          Design, sviluppo front-end e esperienze digitali che lasciano il segno.
-        </p>
-        <a href="#progetti" class="btn btn--light">Scopri i progetti</a>
-      </div>
-    </section>
+        <!-- PAGINA STUDIO -->
+        <section id="studio" class="page">
+            <div class="studio-content">
+                <div class="studio-text">
+                    <h2>Creiamo identità che durano nel tempo.</h2>
+                    <p>Siamo uno studio di design indipendente fondato nel 2020. Ci occupiamo di direzione creativa, branding ed esperienze digitali per brand che vogliono distinguersi.</p>
+                    <p>Il nostro approccio unisce ricerca strategica, estetica minimalista e cura maniacale per i dettagli. Non creiamo solo loghi o siti web; costruiamo ecosistemi visivi coerenti.</p>
+                </div>
+                <div class="studio-info">
+                    <h3>Servizi</h3>
+                    <ul>
+                        <li>Brand Identity <span>(01)</span></li>
+                        <li>Web Design <span>(02)</span></li>
+                        <li>Art Direction <span>(03)</span></li>
+                        <li>Packaging <span>(04)</span></li>
+                        <li>Editoriale <span>(05)</span></li>
+                    </ul>
+                    <h3>Riconoscimenti</h3>
+                    <ul>
+                        <li>Awwwards <span>(2023)</span></li>
+                        <li>CSS Design Awards <span>(2023)</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
 
-    <!-- Featured carousel -->
-    <section class="spotlight" id="progetti" aria-labelledby="spotlight-title">
-      <div class="spotlight__header">
-        <h2 id="spotlight-title" class="sr-only">Progetti in evidenza</h2>
-      </div>
+        <!-- PAGINA CONTATTI -->
+        <section id="contatti" class="page">
+            <div class="contact-content">
+                <div class="studio-text">
+                    <h2>Iniziamo un progetto insieme.</h2>
+                    <p>Siamo sempre alla ricerca di nuove sfide e collaborazioni stimolanti. Se hai un'idea in mente o vuoi semplicemente salutarci, scrivici.</p>
+                </div>
+                <div class="contact-box">
+                    <div class="contact-label">(Hai un progetto in mente?)</div>
+                    <a href="mailto:hello@studio.com" class="contact-email">hello@studio.com</a>
+                    <div class="contact-label">(Seguici)</div>
+                    <div class="socials">
+                        <a href="#">Instagram</a>
+                        <a href="#">Behance</a>
+                        <a href="#">LinkedIn</a>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-      <div class="carousel" data-carousel>
-        <div class="carousel__track" data-carousel-track>
-          <article class="card card--hero" data-category="web design">
-            <a href="#progetto-1" class="card__link">
-              <div class="card__media">
-                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80" alt="Dashboard analytics" loading="lazy" />
-              </div>
-              <div class="card__body">
-                <p class="card__tag">Web App · 2025</p>
-                <h3 class="card__title">Analytics Platform</h3>
-                <p class="card__desc">Dashboard real-time con React e D3.</p>
-                <span class="card__cta">Esplora</span>
-              </div>
-            </a>
-          </article>
+    </main>
 
-          <article class="card card--hero" data-category="brand ui">
-            <a href="#progetto-2" class="card__link">
-              <div class="card__media">
-                <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80" alt="Brand identity mockup" loading="lazy" />
-              </div>
-              <div class="card__body">
-                <p class="card__tag">Brand · 2024</p>
-                <h3 class="card__title">Visual Identity System</h3>
-                <p class="card__desc">Design system completo per startup tech.</p>
-                <span class="card__cta">Esplora</span>
-              </div>
-            </a>
-          </article>
+    <footer>
+        <div>© 2024 STUDIO®</div>
+        <div>Tutti i diritti riservati</div>
+        <div>Creato con passione</div>
+    </footer>
 
-          <article class="card card--hero" data-category="mobile">
-            <a href="#progetto-3" class="card__link">
-              <div class="card__media">
-                <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&q=80" alt="App mobile su smartphone" loading="lazy" />
-              </div>
-              <div class="card__body">
-                <p class="card__tag">Mobile · 2024</p>
-                <h3 class="card__title">Fitness Tracker App</h3>
-                <p class="card__desc">UX mobile-first con animazioni fluide.</p>
-                <span class="card__cta">Esplora</span>
-              </div>
-            </a>
-          </article>
+    <script>
+        // 1. CUSTOM CURSOR (Fluido e reattivo)
+        const dot = document.querySelector('.cursor-dot');
+        const outline = document.querySelector('.cursor-outline');
+        let mouseX = 0, mouseY = 0, outlineX = 0, outlineY = 0;
 
-          <article class="card card--hero" data-category="ecommerce">
-            <a href="#progetto-4" class="card__link">
-              <div class="card__media">
-                <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80" alt="E-commerce checkout" loading="lazy" />
-              </div>
-              <div class="card__body">
-                <p class="card__tag">E-commerce · 2023</p>
-                <h3 class="card__title">Checkout Experience</h3>
-                <p class="card__desc">Conversione +34% con flusso semplificato.</p>
-                <span class="card__cta">Esplora</span>
-              </div>
-            </a>
-          </article>
-        </div>
-        <button class="carousel__btn carousel__btn--prev" data-carousel-prev aria-label="Progetto precedente">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-        </button>
-        <button class="carousel__btn carousel__btn--next" data-carousel-next aria-label="Progetto successivo">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-        </button>
-      </div>
-    </section>
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            dot.style.left = mouseX + 'px';
+            dot.style.top = mouseY + 'px';
+        });
 
-    <!-- Split promos (Nike-style dual blocks) -->
-    <section class="promos">
-      <article class="promo">
-        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=900&q=80" alt="Codice su schermo" loading="lazy" />
-        <div class="promo__content">
-          <p class="promo__eyebrow">Front-end</p>
-          <h2 class="promo__title">Codice che respira design</h2>
-          <div class="promo__actions">
-            <a href="#skills" class="btn btn--dark">Le mie skills</a>
-            <a href="https://github.com" class="btn btn--outline" target="_blank" rel="noopener">GitHub</a>
-          </div>
-        </div>
-      </article>
-      <article class="promo">
-        <img src="https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=900&q=80" alt="UI design su tablet" loading="lazy" />
-        <div class="promo__content">
-          <p class="promo__eyebrow">UI/UX</p>
-          <h2 class="promo__title">Interfacce con attitude</h2>
-          <div class="promo__actions">
-            <a href="#about" class="btn btn--dark">Chi sono</a>
-            <a href="#contatti" class="btn btn--outline">Contattami</a>
-          </div>
-        </div>
-      </article>
-    </section>
+        function animateCursor() {
+            outlineX += (mouseX - outlineX) * 0.15;
+            outlineY += (mouseY - outlineY) * 0.15;
+            outline.style.left = outlineX + 'px';
+            outline.style.top = outlineY + 'px';
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
 
-    <!-- Team picker style → Tech stack -->
-    <section class="stack-picker" id="skills" aria-labelledby="stack-title">
-      <h2 id="stack-title" class="stack-picker__title">SCEGLI IL TUO STACK</h2>
-      <div class="stack-grid">
-        <button class="stack-chip is-active" data-stack="frontend">Front-end</button>
-        <button class="stack-chip" data-stack="design">Design</button>
-        <button class="stack-chip" data-stack="tools">Tools</button>
-        <button class="stack-chip" data-stack="soft">Soft Skills</button>
-      </div>
-      <div class="stack-panel" id="stackPanel">
-        <ul class="stack-list" data-panel="frontend">
-          <li>React / Next.js</li>
-          <li>TypeScript</li>
-          <li>CSS / Tailwind</li>
-          <li>Web Animations</li>
-          <li>Performance & A11y</li>
-        </ul>
-        <ul class="stack-list hidden" data-panel="design">
-          <li>Figma</li>
-          <li>Design Systems</li>
-          <li>Prototyping</li>
-          <li>Motion Design</li>
-          <li>Brand Identity</li>
-        </ul>
-        <ul class="stack-list hidden" data-panel="tools">
-          <li>Git / GitHub</li>
-          <li>Vite / Webpack</li>
-          <li>Node.js</li>
-          <li>Vercel / Netlify</li>
-          <li>Storybook</li>
-        </ul>
-        <ul class="stack-list hidden" data-panel="soft">
-          <li>Problem Solving</li>
-          <li>Comunicazione</li>
-          <li>Team Leadership</li>
-          <li>Agile / Scrum</li>
-          <li>Mentoring</li>
-        </ul>
-      </div>
-    </section>
+        // Funzione globale per legare il cursore agli elementi cliccabili
+        function bindCursorHover() {
+            document.querySelectorAll('a, .project-item, button, .logo, nav a').forEach(el => {
+                // Evita di aggiungere l'evento due volte allo stesso elemento
+                if(!el.dataset.cursorBound) {
+                    el.addEventListener('mouseenter', () => outline.classList.add('hover'));
+                    el.addEventListener('mouseleave', () => outline.classList.remove('hover'));
+                    el.dataset.cursorBound = "true";
+                }
+            });
+        }
+        bindCursorHover(); // Lega inizialmente
 
-    <!-- Experience timeline -->
-    <section class="experience" id="esperienza" aria-labelledby="exp-title">
-      <h2 id="exp-title" class="section-title">Esperienza</h2>
-      <div class="exp-grid">
-        <article class="exp-card">
-          <span class="exp-card__year">2024 — Oggi</span>
-          <h3>Senior Front-end Developer</h3>
-          <p>Studio creativo · Milano</p>
-          <p class="exp-card__detail">Lead su design system e app enterprise.</p>
-        </article>
-        <article class="exp-card">
-          <span class="exp-card__year">2021 — 2024</span>
-          <h3>UI Developer</h3>
-          <p>Agency digitale · Remote</p>
-          <p class="exp-card__detail">E-commerce e campagne per brand internazionali.</p>
-        </article>
-        <article class="exp-card">
-          <span class="exp-card__year">2018 — 2021</span>
-          <h3>Junior Web Developer</h3>
-          <p>Startup · Torino</p>
-          <p class="exp-card__detail">MVP, landing page e integrazioni API.</p>
-        </article>
-      </div>
-    </section>
+        // 2. IMMAGINE PROGETTO FLOATING
+        const previewImg = document.getElementById('projectPreview');
 
-    <!-- About -->
-    <section class="about" id="about" aria-labelledby="about-title">
-      <div class="about__media">
-        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80" alt="Francesco — ritratto" loading="lazy" />
-      </div>
-      <div class="about__content">
-        <p class="about__eyebrow">About</p>
-        <h2 id="about-title" class="about__title">Francesco</h2>
-        <p>
-          Sviluppatore e designer con la convinzione che il miglior codice sia invisibile
-          e la migliore interfaccia sia quella che non si nota — finché non la cerchi.
-        </p>
-        <p>
-          Da oltre 7 anni trasformo brief complessi in prodotti digitali puliti,
-          performanti e memorabili. Ispirato dai grandi brand, costruisco esperienze
-          con la stessa cura del dettaglio che trovi su nike.com — ma con il tuo nome sopra.
-        </p>
-        <a href="#contatti" class="btn btn--dark">Iniziamo un progetto</a>
-      </div>
-    </section>
+        function bindProjectPreview() {
+            document.querySelectorAll('.project-item').forEach(item => {
+                if(!el.dataset.previewBound) {
+                    item.addEventListener('mouseenter', () => {
+                        previewImg.src = item.getAttribute('data-img');
+                        previewImg.classList.add('active');
+                    });
+                    item.addEventListener('mouseleave', () => previewImg.classList.remove('active'));
+                    item.addEventListener('mousemove', (e) => {
+                        previewImg.style.left = e.clientX + 'px';
+                        previewImg.style.top = e.clientY + 'px';
+                    });
+                    el.dataset.previewBound = "true";
+                }
+            });
+        }
+        bindProjectPreview(); // Lega inizialmente
 
-    <!-- Classic links grid (Nike footer links style) -->
-    <section class="klassiker" aria-labelledby="klassiker-title">
-      <h2 id="klassiker-title" class="klassiker__title">Esplora per categoria</h2>
-      <div class="klassiker__grid">
-        <div class="klassiker__col">
-          <h3>Progetti</h3>
-          <ul>
-            <li><a href="#progetto-1">Web Applications</a></li>
-            <li><a href="#progetto-2">Brand & Identity</a></li>
-            <li><a href="#progetto-3">Mobile Apps</a></li>
-            <li><a href="#progetto-4">E-commerce</a></li>
-          </ul>
-        </div>
-        <div class="klassiker__col">
-          <h3>Skills</h3>
-          <ul>
-            <li><a href="#skills">React & TypeScript</a></li>
-            <li><a href="#skills">Design Systems</a></li>
-            <li><a href="#skills">Performance</a></li>
-            <li><a href="#skills">Accessibility</a></li>
-          </ul>
-        </div>
-        <div class="klassiker__col">
-          <h3>Risorse</h3>
-          <ul>
-            <li><a href="#">Blog</a></li>
-            <li><a href="#">Case Studies</a></li>
-            <li><a href="#">Open Source</a></li>
-            <li><a href="#">Newsletter</a></li>
-          </ul>
-        </div>
-        <div class="klassiker__col">
-          <h3>Connect</h3>
-          <ul>
-            <li><a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a></li>
-            <li><a href="https://github.com" target="_blank" rel="noopener">GitHub</a></li>
-            <li><a href="https://dribbble.com" target="_blank" rel="noopener">Dribbble</a></li>
-            <li><a href="mailto:hello@francesco.dev">Email</a></li>
-          </ul>
-        </div>
-      </div>
-    </section>
+        
+        // 3. SISTEMA DI NAVIGAZIONE SPA (Cambio pagina)
+        const pages = document.querySelectorAll('.page');
+        const navLinks = document.querySelectorAll('[data-page]');
 
-    <!-- Contact CTA -->
-    <section class="contact-cta" id="contatti" aria-labelledby="contact-title">
-      <h2 id="contact-title" class="contact-cta__title">HAI UN PROGETTO IN MENTE?</h2>
-      <p>Parliamone. Rispondo entro 24 ore.</p>
-      <a href="mailto:hello@francesco.dev" class="btn btn--light btn--large">hello@francesco.dev</a>
-    </section>
-  </main>
+        function changePage(pageId) {
+            // Rimuovi active da tutte le pagine
+            pages.forEach(page => page.classList.remove('active'));
+            
+            // Rimuovi active da tutti i link
+            navLinks.forEach(link => link.classList.remove('active'));
 
-  <footer class="site-footer">
-    <div class="footer__cols">
-      <div class="footer__col">
-        <h4>Risorse</h4>
-        <ul>
-          <li><a href="#progetti">Portfolio</a></li>
-          <li><a href="#">CV Download</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#">Blog</a></li>
-        </ul>
-      </div>
-      <div class="footer__col">
-        <h4>Aiuto</h4>
-        <ul>
-          <li><a href="#contatti">Contatti</a></li>
-          <li><a href="#">FAQ</a></li>
-          <li><a href="#">Privacy</a></li>
-          <li><a href="#">Termini</a></li>
-        </ul>
-      </div>
-      <div class="footer__col">
-        <h4>Social</h4>
-        <ul>
-          <li><a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a></li>
-          <li><a href="https://github.com" target="_blank" rel="noopener">GitHub</a></li>
-          <li><a href="https://twitter.com" target="_blank" rel="noopener">X / Twitter</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer__bottom">
-      <p>© 2026 Francesco. Tutti i diritti riservati.</p>
-      <p class="footer__note">Design ispirato a <a href="https://www.nike.com/de/" target="_blank" rel="noopener">Nike.com</a> — portfolio personale.</p>
-      <button class="footer__locale" type="button">Italia · IT</button>
-    </div>
-  </footer>
+            // Mostra la pagina richiesta
+            const targetPage = document.getElementById(pageId);
+            if(targetPage) {
+                targetPage.classList.add('active');
+            }
 
-  <script src="js/main.js"></script>
+            // Aggiorna lo stile del link nel menu corrispondente
+            navLinks.forEach(link => {
+                if (link.getAttribute('data-page') === pageId) {
+                    link.classList.add('active');
+                }
+            });
+
+            // Scrolla in cima alla pagina nuova
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Intercetta i clic sui link di navigazione
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageId = link.getAttribute('data-page');
+                changePage(pageId);
+            });
+        });
+
+    </script>
 </body>
 </html>
